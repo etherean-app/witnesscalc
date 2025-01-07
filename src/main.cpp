@@ -28,15 +28,15 @@ int main (int argc, char *argv[]) {
 
     std::string cl(argv[0]);
 
-    if (argc!=3) {
-        std::cout << "Usage: " << cl << " <input.json> <output.wtns>\n";
+    if (argc!=4) {
+        std::cout << "Usage: " << cl << "<datfile.dat> <input.json> <output.wtns>\n";
         return EXIT_FAILURE;
     }
 
     try {
-        std::string datfile = cl + ".dat";
-        std::string jsonfile(argv[1]);
-        std::string wtnsFileName(argv[2]);
+        std::string datfile = argv[1];
+        std::string jsonfile(argv[2]);
+        std::string wtnsFileName(argv[3]);
 
         size_t witnessSize = sizeof(WitnessBuffer);
         char   errorMessage[256];
@@ -73,4 +73,3 @@ int main (int argc, char *argv[]) {
 
     return EXIT_SUCCESS;
 }
-

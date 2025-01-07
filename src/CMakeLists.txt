@@ -60,10 +60,13 @@ add_executable(test_platform test_platform.cpp)
 
 
 set(LIB_SOURCES
-    calcwit.cpp
-    witnesscalc.h
-    witnesscalc.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/calcwit.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/witnesscalc.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/witnesscalc.cpp
+    CACHE INTERNAL "Library sources"
     )
+
+add_subdirectory(circuits/PassportVerificationValidity)
 
 # authV2
 set(AUTHV2_SOURCES ${LIB_SOURCES}
@@ -209,4 +212,3 @@ target_link_libraries(linkedMultiQuery10 witnesscalc_linkedMultiQuery10Static)
 target_compile_definitions(witnesscalc_linkedMultiQuery10 PUBLIC CIRCUIT_NAME=linkedMultiQuery10)
 target_compile_definitions(witnesscalc_linkedMultiQuery10Static PUBLIC CIRCUIT_NAME=linkedMultiQuery10)
 target_compile_definitions(linkedMultiQuery10 PUBLIC CIRCUIT_NAME=linkedMultiQuery10)
-

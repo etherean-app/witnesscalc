@@ -46,6 +46,11 @@ elseif(TARGET_PLATFORM MATCHES "ios")
         set(ARCH arm64)
     endif()
 
+elseif(TARGET_PLATFORM MATCHES "macos-aarch64")
+
+    set(GMP_PREFIX ${GMP_ROOT}/package_macos_arm64)
+    set(ARCH arm64)
+
 elseif(TARGET_PLATFORM MATCHES "aarch64")
 
     set(GMP_PREFIX ${GMP_ROOT}/package_aarch64)
