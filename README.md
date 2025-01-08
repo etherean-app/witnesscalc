@@ -16,18 +16,16 @@ git submodule init
 git submodule update
 ```
 
-### Compile witnesscalc for x86_64 host machine
+### Compile witnesscalc for macos arm64
 
 ```sh
-./build_gmp.sh host
-make host
+./build_macos_arm64.sh
 ```
 
-### Compile witnesscalc for arm64 host machine
+### Compile witnesscalc for ios (arm64)
 
 ```sh
-./build_gmp.sh host
-make arm64_host
+./build_ios.sh
 ```
 
 ### Compile witnesscalc for Android
@@ -46,16 +44,10 @@ export ANDROID_NDK=/home/test/android-ndk-r23b              # NDK is installed a
 Compilation for arm64:
 
 ```sh
-./build_gmp.sh android
-make android
+./build_android_arm64.sh
 ```
 
-Compilation for x86_64:
-
-```sh
-./build_gmp.sh android_x86_64
-make android_x86_64
-```
+TBD
 
 ### Compile witnesscalc for iOS
 
