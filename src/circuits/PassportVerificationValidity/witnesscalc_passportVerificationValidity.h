@@ -22,12 +22,14 @@ extern "C" {
  *
  */
 
-int
-witnesscalc_passportVerificationValidity(
-    const char *circuit_buffer,  unsigned long  circuit_size,
-    const char *json_buffer,     unsigned long  json_size,
-    char       *wtns_buffer,     unsigned long *wtns_size,
-    char       *error_msg,       unsigned long  error_msg_maxsize);
+int witnesscalc_passportVerificationValidity(
+    const char* json_buffer,
+    unsigned long json_size,
+    char* wtns_buffer,
+    unsigned long* wtns_size,
+    char* error_msg,
+    unsigned long error_msg_maxsize
+);
 
 #ifdef __cplusplus
 }

@@ -1,7 +1,8 @@
 #ifndef WITNESSCALC_H
 #define WITNESSCALC_H
 
-namespace CIRCUIT_NAME {
+namespace
+CIRCUIT_NAME {
 
 #define WITNESSCALC_OK                  0x0
 #define WITNESSCALC_ERROR               0x1
@@ -23,10 +24,15 @@ namespace CIRCUIT_NAME {
 
 int
 witnesscalc(
-    const char *circuit_buffer,  unsigned long  circuit_size,
-    const char *json_buffer,     unsigned long  json_size,
-    char       *wtns_buffer,     unsigned long *wtns_size,
-    char       *error_msg,       unsigned long  error_msg_maxsize);
+    const char* circuit_buffer,
+    unsigned long circuit_size,
+    const char* json_buffer,
+    unsigned long json_size,
+    char* wtns_buffer,
+    unsigned long* wtns_size,
+    char* error_msg,
+    unsigned long error_msg_maxsize
+);
 
 /**
  * A wrapper function for `witnesscalc` that takes the circuit as a .dat file
@@ -34,10 +40,14 @@ witnesscalc(
  */
 int
 witnesscalc_from_dat_file(
-    const char *dat_fname,
-    const char *json_buffer,     unsigned long  json_size,
-    char       *wtns_buffer,     unsigned long *wtns_size,
-    char       *error_msg,       unsigned long  error_msg_maxsize);
+    const char* dat_fname,
+    const char* json_buffer,
+    unsigned long json_size,
+    char* wtns_buffer,
+    unsigned long* wtns_size,
+    char* error_msg,
+    unsigned long error_msg_maxsize
+);
 
 } // namespace
 

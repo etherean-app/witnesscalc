@@ -78,7 +78,7 @@ depends/gmp*
 
 build/*.o
 build_*
-_build
+_build*
 cmake-build-*
 package*
 
