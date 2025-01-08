@@ -41,7 +41,14 @@ target_compile_definitions(${PROJECT_NAME} PUBLIC
     DAT_FILE_LEN=${SOURCE_CIRCUIT_NAME}_dat_len
 )
 
-install(TARGETS ${PROJECT_NAME} DESTINATION ${CMAKE_INSTALL_PREFIX}/bin)
+install(TARGETS
+    ${PROJECT_NAME}
+    DESTINATION ${CMAKE_INSTALL_PREFIX}/bin)
+
+install(TARGETS
+    witnesscalc_${PROJECT_NAME}
+    witnesscalc_${PROJECT_NAME}Static
+    DESTINATION ${CMAKE_INSTALL_PREFIX}/lib)
 
 install(FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/PassportVerificationValidity.dat
