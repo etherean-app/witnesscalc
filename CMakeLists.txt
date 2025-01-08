@@ -25,10 +25,83 @@ if (NOT EXISTS ${GMP_LIB_FILE_FULLPATH})
     set(GMP_LIB gmp)
 endif ()
 
-
+include_directories(
+    src
+    src/fr
+    depends/json/single_include
+)
 include_directories(BEFORE ${GMP_INCLUDE_DIR})
 
-add_subdirectory(src)
+link_libraries(${GMP_LIB})
+add_definitions(${GMP_DEFINIONS})
+
+if (USE_ASM)
+    if (ARCH MATCHES "arm64")
+        add_definitions(-DUSE_ASM -DARCH_ARM64)
+    elseif (ARCH MATCHES "x86_64")
+        add_definitions(-DUSE_ASM -DARCH_X86_64)
+    endif ()
+endif ()
+
+if (USE_ASM AND ARCH MATCHES "x86_64")
+
+    if (CMAKE_HOST_SYSTEM_NAME MATCHES "Darwin" AND NOT TARGET_PLATFORM MATCHES "^android(_x86_64)?")
+        set(NASM_FLAGS -fmacho64 --prefix _)
+    else ()
+        set(NASM_FLAGS -felf64 -DPIC)
+    endif ()
+
+    add_custom_command(OUTPUT ${CMAKE_SOURCE_DIR}/src/fr/fq_asm.o
+        COMMAND nasm ${NASM_FLAGS} fq.asm -o fq_asm.o
+        DEPENDS ${CMAKE_SOURCE_DIR}/src/fr/fq.asm
+        WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/src/fr)
+
+    add_custom_command(OUTPUT ${CMAKE_SOURCE_DIR}/src/fr/fr_asm.o
+        COMMAND nasm ${NASM_FLAGS} fr.asm -o fr_asm.o
+        DEPENDS ${CMAKE_SOURCE_DIR}/src/fr/fr.asm
+        WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/src/fr)
+endif ()
+
+set(FR_SOURCES
+    ${CMAKE_SOURCE_DIR}/src/fr/fr.hpp
+    ${CMAKE_SOURCE_DIR}/src/fr/fr.cpp
+)
+
+if (USE_ASM)
+    if (ARCH MATCHES "arm64")
+        set(FR_SOURCES ${FR_SOURCES}
+            ${CMAKE_SOURCE_DIR}/src/fr/fr_raw_arm64.s
+            ${CMAKE_SOURCE_DIR}/src/fr/fr_raw_generic.cpp
+            ${CMAKE_SOURCE_DIR}/src/fr/fr_generic.cpp
+        )
+    elseif (ARCH MATCHES "x86_64")
+        set(FR_SOURCES ${FR_SOURCES}
+            ${CMAKE_SOURCE_DIR}/src/fr/fr_asm.o
+        )
+    endif ()
+else ()
+    set(FR_SOURCES ${FR_SOURCES}
+        ${CMAKE_SOURCE_DIR}/src/fr/fr_generic.cpp
+        ${CMAKE_SOURCE_DIR}/src/fr/fr_raw_generic.cpp
+    )
+endif ()
+
+add_library(fr STATIC ${FR_SOURCES})
+set_target_properties(fr PROPERTIES POSITION_INDEPENDENT_CODE ON)
+link_libraries(fr)
+
+add_executable(tests src/tests.cpp)
+add_executable(test_platform src/test_platform.cpp)
+
+
+set(LIB_SOURCES
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/calcwit.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/witnesscalc.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/witnesscalc.cpp
+    CACHE INTERNAL "Library sources"
+)
+
+include(cmake/circuits_source_generator.cmake)
 
 
 install(TARGETS

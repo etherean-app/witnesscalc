@@ -2,6 +2,7 @@ project(passportVerificationValidity)
 
 set(SOURCE_CIRCUIT_NAME "PassportVerificationValidity")
 
+
 message(STATUS "LIB_SOURCES: ${LIB_SOURCES}")
 set(SOURCES ${LIB_SOURCES}
     ${SOURCE_CIRCUIT_NAME}.cpp
@@ -10,7 +11,6 @@ set(SOURCES ${LIB_SOURCES}
 )
 
 
-# embed PassportVerificationValidity.dat as a binary blob
 execute_process(
     COMMAND bash -c "xxd -i ${SOURCE_CIRCUIT_NAME}.dat | sed 's/unsigned char/const unsigned char/g' > ${CMAKE_CURRENT_BINARY_DIR}/${SOURCE_CIRCUIT_NAME}_dat.h"
     WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
@@ -51,10 +51,5 @@ install(TARGETS
     DESTINATION ${CMAKE_INSTALL_PREFIX}/lib)
 
 install(FILES
-    ${CMAKE_CURRENT_SOURCE_DIR}/PassportVerificationValidity.dat
-    DESTINATION ${CMAKE_INSTALL_PREFIX}/bin)
-
-install(FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/witnesscalc_${PROJECT_NAME}.h
-    ${CMAKE_CURRENT_BINARY_DIR}/PassportVerificationValidity_dat.h
     DESTINATION ${CMAKE_INSTALL_PREFIX}/include)

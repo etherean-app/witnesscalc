@@ -12,10 +12,12 @@ if [ ! -f "$file_path" ]; then
     exit 1
 fi
 
-sed "$(grep -n "^#include" ${file_path} | cut -d ':' -f 1 | tail -n 1) a\\
+RESULT=$(sed "$(grep -n "^#include" ${file_path} | cut -d ':' -f 1 | tail -n 1) a\\
 \\
 namespace CIRCUIT_NAME {\\
 
 ; /^#include <assert\\.h>\$/ d; s/^assert(/check(/; $ a\\
 }\\
-" ${file_path}
+" ${file_path})
+
+echo "$RESULT" > ${file_path}

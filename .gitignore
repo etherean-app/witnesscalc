@@ -68,6 +68,7 @@ typings/
 tmp
 temp
 
+*.o
 .DS_Store
 
 # Workspace files are user-specific
@@ -75,6 +76,7 @@ temp
 CMakeLists.txt.user
 
 depends/gmp*
+depends/zk-circuits
 
 build/*.o
 build_*

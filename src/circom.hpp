@@ -1,5 +1,4 @@
-#ifndef __CIRCOM_H
-#define __CIRCOM_H
+#pragma once
 
 #include <map>
 #include <gmp.h>
@@ -9,7 +8,8 @@
 
 #include "fr.hpp"
 
-namespace CIRCUIT_NAME {
+namespace
+CIRCUIT_NAME {
 
 typedef unsigned long long u64;
 typedef uint32_t u32;
@@ -18,65 +18,68 @@ typedef uint8_t u8;
 //only for the main inputs
 struct __attribute__((__packed__)) HashSignalInfo {
     u64 hash;
-    u64 signalid; 
-    u64 signalsize; 
+    u64 signalid;
+    u64 signalsize;
 };
 
-struct IODef { 
+struct IODef {
     u32 offset;
     u32 len;
-    u32 *lengths = nullptr;
+    u32* lengths = nullptr;
 };
 
-struct IODefPair { 
+struct IODefPair {
     u32 len;
     IODef* defs = nullptr;
 };
 
 struct Circom_Circuit {
-  //  const char *P;
-  HashSignalInfo* InputHashMap = nullptr;
-  u64* witness2SignalList = nullptr;
-  FrElement* circuitConstants = nullptr;  
-  std::map<u32,IODefPair> templateInsId2IOSignalInfo;
+    //  const char *P;
+    HashSignalInfo* InputHashMap = nullptr;
+    u64* witness2SignalList = nullptr;
+    FrElement* circuitConstants = nullptr;
+    std::map<u32, IODefPair> templateInsId2IOSignalInfo;
 
-  ~Circom_Circuit() {
+    ~Circom_Circuit() {
 
-    delete[] InputHashMap;
+        delete[] InputHashMap;
 
-    delete[] witness2SignalList;
+        delete[] witness2SignalList;
 
-    delete[] circuitConstants;
+        delete[] circuitConstants;
 
-    for (auto &pair : templateInsId2IOSignalInfo) {
-      auto *defs = pair.second.defs;
-      if (defs != nullptr) {
-        delete[] defs->lengths;
-        free(defs);
-      }
+        for (auto& pair: templateInsId2IOSignalInfo) {
+            auto* defs = pair.second.defs;
+            if (defs != nullptr) {
+                delete[] defs->lengths;
+                free(defs);
+            }
+        }
+
     }
-
-  }
 };
 
-
 struct Circom_Component {
-  u32 templateId;
-  u64 signalStart;
-  u32 inputCounter;
-  std::string templateName;
-  std::string componentName;
-  u64 idFather; 
-  u32* subcomponents = nullptr;
-  bool* subcomponentsParallel = nullptr;
-  bool *outputIsSet = nullptr;  //one for each output
-  std::mutex *mutexes = nullptr;  //one for each output
-  std::condition_variable *cvs = nullptr;
-  std::thread *sbct = nullptr; //subcomponent threads
+    u32 templateId;
+    u64 signalStart;
+    u32 inputCounter;
+    std::string templateName;
+    std::string componentName;
+    u64 idFather;
+    u32* subcomponents = nullptr;
+    bool* subcomponentsParallel = nullptr;
+    bool* outputIsSet = nullptr; //one for each output
+    std::mutex* mutexes = nullptr; //one for each output
+    std::condition_variable* cvs = nullptr;
+    std::thread* sbct = nullptr; //subcomponent threads
 
-  Circom_Component()
-	: subcomponents(0), subcomponentsParallel(0), outputIsSet(0), mutexes(0), cvs(0), sbct(0)
-  {}
+    Circom_Component()
+        : subcomponents(0)
+        , subcomponentsParallel(0)
+        , outputIsSet(0)
+        , mutexes(0)
+        , cvs(0)
+        , sbct(0) { }
 
 };
 
@@ -108,4 +111,3 @@ uint get_size_of_constants();
 uint get_size_of_io_map();
 
 } //namespace
-#endif  // __CIRCOM_H
