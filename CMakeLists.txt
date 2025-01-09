@@ -108,12 +108,21 @@ include(cmake/lib_source_generator.cmake)
 
 set(AGGREGATED_LIB_SOURCES ${CMAKE_BINARY_DIR}/witness_calculator.h ${CMAKE_BINARY_DIR}/witness_calculator.cpp)
 add_library(witness_calculator SHARED ${AGGREGATED_LIB_SOURCES})
+target_compile_definitions(witness_calculator PRIVATE WITNESS_CALCULATOR_EXPORT)
+target_link_libraries(witness_calculator PRIVATE ${WC_LIBS})
+
+# Create the final static library
 add_library(witness_calculatorStatic STATIC ${AGGREGATED_LIB_SOURCES})
+
+# Dynamically add objects from WC_LIBS
+foreach (lib ${WC_LIBS})
+    target_sources(witness_calculatorStatic PRIVATE $<TARGET_OBJECTS:${lib}>)
+endforeach ()
+
+# Set output properties for the static library
 set_target_properties(witness_calculatorStatic PROPERTIES
     OUTPUT_NAME witness_calculator
 )
-target_link_libraries(witness_calculator PRIVATE ${WC_LIBS})
-target_link_libraries(witness_calculatorStatic PRIVATE ${WC_LIBS})
 
 install(TARGETS
     fr
@@ -125,7 +134,6 @@ install(TARGETS
 
 install(FILES "${GMP_LIB_DIR}/${GMP_LIB_FILE}"
     DESTINATION ${CMAKE_INSTALL_PREFIX}/lib)
-
 
 install(FILES
     ${CMAKE_BINARY_DIR}/witness_calculator.h

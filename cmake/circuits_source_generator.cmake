@@ -122,7 +122,7 @@ foreach (CIRCUIT ${CIRCUIT_DIRS})
     list(APPEND SUBDIRS ${CIRCUIT_NAME})
 
 
-    set(WC_LIBS "${WC_LIBS};witnesscalc_${CIRCUIT_NAME_CAMEL}Static")
+    set(WC_LIBS "${WC_LIBS};witnesscalc_${CIRCUIT_NAME_CAMEL}Objects")
 endforeach ()
 
 message(STATUS "All circuits: ${CIRCUIT_NAMES}")

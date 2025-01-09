@@ -4,6 +4,18 @@ set(source_file "${CMAKE_BINARY_DIR}/witness_calculator.cpp")
 
 # Open header file and write contents
 file(WRITE "${header_file}" "#pragma once\n\n")
+
+file(APPEND "${header_file}" "#ifdef _WIN32
+  #ifdef WITNESS_CALCULATOR_EXPORT
+    #define WITNESS_CALCULATOR_API __declspec(dllexport)
+  #else
+    #define WITNESS_CALCULATOR_API __declspec(dllimport)
+  #endif
+#else
+  #define WITNESS_CALCULATOR_API __attribute__((visibility(\"default\")))
+#endif
+")
+
 file(APPEND "${header_file}" "#ifdef __cplusplus\nextern \"C\" {\n#endif\n\n")
 file(APPEND "${header_file}" "#define WITNESSCALC_OK                  0x0\n")
 file(APPEND "${header_file}" "#define WITNESSCALC_ERROR               0x1\n")
@@ -18,7 +30,7 @@ foreach(func ${CIRCUIT_NAMES_CAMEL})
     list(GET CIRCUIT_NAMES ${index} CIRCUIT_NAME_PASCAL)
 
     # Generate function declarations for the header file
-    file(APPEND "${header_file}" "int calculate_witness_${func}(\n")
+    file(APPEND "${header_file}" "WITNESS_CALCULATOR_API int calculate_witness_${func}(\n")
     file(APPEND "${header_file}" "    const char* json_buffer,\n")
     file(APPEND "${header_file}" "    unsigned long json_size,\n")
     file(APPEND "${header_file}" "    char* wtns_buffer,\n")
