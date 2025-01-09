@@ -3,7 +3,7 @@
 #include "circom.hpp"
 #include "calcwit.hpp"
 
-namespace CIRCUIT_NAME {
+namespace edDSADocumentVerifier {
 
 void Num2Bits_0_create(uint soffset,uint coffset,Circom_CalcWit* ctx,std::string componentName,uint componentFather);
 void Num2Bits_0_run(uint ctx_index,Circom_CalcWit* ctx);

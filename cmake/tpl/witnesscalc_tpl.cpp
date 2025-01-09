@@ -1,9 +1,7 @@
 #include "witnesscalc_@CIRCUIT_NAME_CAMEL@.h"
 #include "witnesscalc.h"
 
-#define STR(x) #x
-#define INCLUDE_FILE(x) STR(x)
-#include INCLUDE_FILE(DAT_FILE_BINARY.h)
+@DAT_FILE@
 
 int witnesscalc_@CIRCUIT_NAME_CAMEL@(
     const char* json_buffer,
@@ -13,9 +11,9 @@ int witnesscalc_@CIRCUIT_NAME_CAMEL@(
     char* error_msg,
     unsigned long error_msg_maxsize
 ) {
-    return CIRCUIT_NAME::witnesscalc(
-        reinterpret_cast<const char *>(DAT_FILE_BINARY),
-        DAT_FILE_LEN,
+    return @CIRCUIT_NAME_CAMEL@::witnesscalc(
+        reinterpret_cast<const char *>(@CIRCUIT_NAME@_dat),
+        @CIRCUIT_NAME@_dat_len,
         json_buffer,
         json_size,
         wtns_buffer,

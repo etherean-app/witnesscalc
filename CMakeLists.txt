@@ -94,18 +94,31 @@ add_executable(tests src/tests.cpp)
 add_executable(test_platform src/test_platform.cpp)
 
 
-set(LIB_SOURCES
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/calcwit.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/witnesscalc.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/witnesscalc.cpp
-    CACHE INTERNAL "Library sources"
-)
+#set(LIB_SOURCES
+#    ${CMAKE_CURRENT_SOURCE_DIR}/src/calcwit.cpp
+#    ${CMAKE_CURRENT_SOURCE_DIR}/src/witnesscalc.h
+#    ${CMAKE_CURRENT_SOURCE_DIR}/src/witnesscalc.cpp
+#    CACHE INTERNAL "Library sources"
+#)
 
+
+set(WC_LIBS "")
 include(cmake/circuits_source_generator.cmake)
+include(cmake/lib_source_generator.cmake)
 
+set(AGGREGATED_LIB_SOURCES ${CMAKE_BINARY_DIR}/witness_calculator.h ${CMAKE_BINARY_DIR}/witness_calculator.cpp)
+add_library(witness_calculator SHARED ${AGGREGATED_LIB_SOURCES})
+add_library(witness_calculatorStatic STATIC ${AGGREGATED_LIB_SOURCES})
+set_target_properties(witness_calculatorStatic PROPERTIES
+    OUTPUT_NAME witness_calculator
+)
+target_link_libraries(witness_calculator PRIVATE ${WC_LIBS})
+target_link_libraries(witness_calculatorStatic PRIVATE ${WC_LIBS})
 
 install(TARGETS
     fr
+    witness_calculatorStatic
+    witness_calculator
     RUNTIME DESTINATION ${CMAKE_INSTALL_PREFIX}/bin
     BUNDLE DESTINATION ${CMAKE_INSTALL_PREFIX}/app
     LIBRARY DESTINATION ${CMAKE_INSTALL_PREFIX}/lib)
@@ -114,6 +127,6 @@ install(FILES "${GMP_LIB_DIR}/${GMP_LIB_FILE}"
     DESTINATION ${CMAKE_INSTALL_PREFIX}/lib)
 
 
-#install(FILES
-#    src/witnesscalc.h
-#    DESTINATION ${CMAKE_INSTALL_PREFIX}/include)
+install(FILES
+    ${CMAKE_BINARY_DIR}/witness_calculator.h
+    DESTINATION ${CMAKE_INSTALL_PREFIX}/include)
