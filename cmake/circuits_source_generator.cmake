@@ -19,7 +19,7 @@ execute_process(
 if (NOT EXISTS "${CIRCUITS_SOURCE_DIR}/zkit/artifacts/circuits")
     message(STATUS "Building circuits...")
     execute_process(
-        COMMAND npx hardhat zkit make --c --force
+        COMMAND npm run make
         WORKING_DIRECTORY ${CIRCUITS_SOURCE_DIR}
     )
 endif ()
